@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { ProtectedRoute, AdminRoute } from "./components/ProtectedRoute";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -23,32 +25,34 @@ import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        {/* User Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/mood" element={<Mood />} />
-        <Route path="/journal" element={<Journal />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/report" element={<Report />} />
+          {/* Protected User Routes */}
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/mood" element={<ProtectedRoute><Mood /></ProtectedRoute>} />
+          <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
+          <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+          <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
 
-        {/* Admin Routes */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/crisis" element={<AdminCrisis />} />
-        <Route path="/admin/analytics" element={<Placeholder />} />
-        <Route path="/admin/reports" element={<Placeholder />} />
-        <Route path="/admin/system" element={<AdminSystem />} />
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+          <Route path="/admin/crisis" element={<AdminRoute><AdminCrisis /></AdminRoute>} />
+          <Route path="/admin/analytics" element={<AdminRoute><Placeholder /></AdminRoute>} />
+          <Route path="/admin/reports" element={<AdminRoute><Placeholder /></AdminRoute>} />
+          <Route path="/admin/system" element={<AdminRoute><AdminSystem /></AdminRoute>} />
 
-        {/* Catch-all */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Catch-all */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

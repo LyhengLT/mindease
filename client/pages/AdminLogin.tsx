@@ -1,10 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Brain, Users, AlertTriangle, TrendingUp, Lock } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminLogin() {
+  const { adminLogin } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const features = [
     { icon: <Users className="w-6 h-6" />, text: "User Management" },
@@ -12,6 +16,17 @@ export default function AdminLogin() {
     { icon: <TrendingUp className="w-6 h-6" />, text: "Analytics" },
     { icon: <Lock className="w-6 h-6" />, text: "System Control" },
   ];
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    const err = adminLogin(email, password);
+    if (err) {
+      setError(err);
+    } else {
+      navigate("/admin/dashboard");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -35,12 +50,8 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        <h2 className="text-3xl font-bold text-foreground mb-2">
-          Administrative Control Panel
-        </h2>
-        <p className="text-foreground/60 mb-12">
-          Manage platform health, users, and crisis alerts.
-        </p>
+        <h2 className="text-3xl font-bold text-foreground mb-2">Administrative Control Panel</h2>
+        <p className="text-foreground/60 mb-12">Manage platform health, users, and crisis alerts.</p>
 
         <div className="space-y-6">
           {features.map((feature, idx) => (
@@ -48,62 +59,59 @@ export default function AdminLogin() {
               <div className="text-amber-500 mt-1">{feature.icon}</div>
               <div>
                 <p className="font-semibold text-foreground">{feature.text}</p>
-                <p className="text-sm text-foreground/60">
-                  Complete platform management
-                </p>
+                <p className="text-sm text-foreground/60">Complete platform management</p>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+          <p className="text-sm text-foreground/70 font-medium mb-1">Demo admin credentials</p>
+          <p className="text-xs text-foreground/50">Email: <span className="text-amber-400">admin@mindease.com</span></p>
+          <p className="text-xs text-foreground/50">Password: <span className="text-amber-400">admin123</span></p>
         </div>
       </div>
 
       {/* Right Panel - 40% */}
       <div className="w-full md:w-2/5 p-8 md:p-12 flex items-center justify-center">
         <div className="w-full max-w-sm space-y-4">
-          {/* Warning Banner */}
           <div className="p-4 bg-amber-500/20 border border-amber-500/40 rounded-lg">
             <p className="text-sm text-amber-200">
               ⚠️ This login is separate from user accounts. Do not share credentials.
             </p>
           </div>
 
-          {/* Login Form */}
           <div className="bg-card border border-border/40 rounded-lg p-8 backdrop-blur-sm">
-            <h1 className="text-2xl font-bold text-foreground mb-2">
-              Admin Sign In
-            </h1>
-            <p className="text-foreground/60 mb-8">
-              Enter your administrative credentials
-            </p>
+            <h1 className="text-2xl font-bold text-foreground mb-2">Admin Sign In</h1>
+            <p className="text-foreground/60 mb-8">Enter your administrative credentials</p>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-              className="space-y-4"
-            >
+            {error && (
+              <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Admin Email
-                </label>
+                <label className="block text-sm font-medium text-foreground mb-2">Admin Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@mindease.com"
+                  required
                   className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Password
-                </label>
+                <label className="block text-sm font-medium text-foreground mb-2">Password</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  required
                   className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
                 />
               </div>
@@ -119,10 +127,7 @@ export default function AdminLogin() {
             <div className="border-t border-border/40 mt-6 pt-6">
               <p className="text-center text-foreground/60 text-sm">
                 User account?{" "}
-                <Link
-                  to="/login"
-                  className="text-amber-500 hover:text-amber-400 transition-colors font-medium"
-                >
+                <Link to="/login" className="text-amber-500 hover:text-amber-400 transition-colors font-medium">
                   Return to user login
                 </Link>
               </p>

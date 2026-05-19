@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
-import { Brain, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Brain, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export function AdminNavbar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/admin/login");
+  }
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
       <div className="flex items-center justify-between px-6 h-16">
@@ -13,9 +22,15 @@ export function AdminNavbar() {
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors">
-            <Settings className="w-5 h-5 text-foreground" />
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-foreground/70 hidden md:block">{user?.fullName}</span>
+          <button
+            onClick={handleLogout}
+            title="Sign out"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-card transition-colors text-foreground/60 hover:text-foreground text-sm"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden md:block">Logout</span>
           </button>
         </div>
       </div>

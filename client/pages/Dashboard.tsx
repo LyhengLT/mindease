@@ -1,6 +1,7 @@
 import { UserNavbar } from "@/components/UserNavbar";
 import { MetricCard } from "@/components/MetricCard";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import {
   BarChart,
   Bar,
@@ -13,6 +14,7 @@ import {
 import { Smile, BookOpen, MessageSquare, Calendar, LogIn } from "lucide-react";
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const moodData = [
     { day: "Mon", mood: 6 },
     { day: "Tue", mood: 7 },
@@ -36,7 +38,7 @@ export default function Dashboard() {
       <main className="pt-24 pb-12 px-6 max-w-7xl mx-auto">
         {/* Greeting */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground">Good morning, Lyheng</h1>
+          <h1 className="text-4xl font-bold text-foreground">Good morning, {user?.fullName.split(" ")[0]}</h1>
           <p className="text-foreground/60 mt-2">
             {new Date().toLocaleDateString("en-US", {
               weekday: "long",

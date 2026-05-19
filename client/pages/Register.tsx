@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Brain, Smile, BookOpen, MessageSquare, BarChart3 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Register() {
+  const { register } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState("");
 
   const features = [
     { icon: <Smile className="w-6 h-6" />, text: "Mood Check-in" },
@@ -17,10 +21,25 @@ export default function Register() {
     { icon: <BarChart3 className="w-6 h-6" />, text: "Weekly Reports" },
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    const err = register(formData.fullName, formData.email, formData.password);
+    if (err) {
+      setError(err);
+    } else {
+      navigate("/dashboard");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -44,9 +63,7 @@ export default function Register() {
               <div className="text-primary mt-1">{feature.icon}</div>
               <div>
                 <p className="font-semibold text-foreground">{feature.text}</p>
-                <p className="text-sm text-foreground/60">
-                  Get daily insights and support
-                </p>
+                <p className="text-sm text-foreground/60">Get daily insights and support</p>
               </div>
             </div>
           ))}
@@ -56,71 +73,64 @@ export default function Register() {
       {/* Right Panel - 40% */}
       <div className="w-full md:w-2/5 p-8 md:p-12 flex items-center justify-center">
         <div className="w-full max-w-sm bg-card border border-border/40 rounded-lg p-8 backdrop-blur-sm">
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            Create your account
-          </h1>
-          <p className="text-foreground/60 mb-8">
-            Join MindEase and start your wellness journey
-          </p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Create your account</h1>
+          <p className="text-foreground/60 mb-8">Join MindEase and start your wellness journey</p>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-            className="space-y-4"
-          >
+          {error && (
+            <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Full Name
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-2">Full Name</label>
               <input
                 type="text"
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="John Doe"
+                required
                 className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
+                required
                 className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
               <input
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
+                required
                 className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Confirm Password
-              </label>
+              <label className="block text-sm font-medium text-foreground mb-2">Confirm Password</label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
+                required
                 className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
@@ -139,10 +149,7 @@ export default function Register() {
 
           <p className="text-center text-foreground/60 mt-6">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-primary hover:text-primary/90 transition-colors font-medium"
-            >
+            <Link to="/login" className="text-primary hover:text-primary/90 transition-colors font-medium">
               Sign in
             </Link>
           </p>
