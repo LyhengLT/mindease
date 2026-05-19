@@ -1,10 +1,3 @@
-import "./global.css";
-
-import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Public Pages
@@ -28,42 +21,34 @@ import AdminSystem from "./pages/AdminSystem";
 import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        {/* User Routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/mood" element={<Mood />} />
+        <Route path="/journal" element={<Journal />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/report" element={<Report />} />
 
-          {/* User Routes */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/mood" element={<Mood />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/report" element={<Report />} />
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/crisis" element={<AdminCrisis />} />
+        <Route path="/admin/analytics" element={<Placeholder />} />
+        <Route path="/admin/reports" element={<Placeholder />} />
+        <Route path="/admin/system" element={<AdminSystem />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/crisis" element={<AdminCrisis />} />
-          <Route path="/admin/analytics" element={<Placeholder />} />
-          <Route path="/admin/reports" element={<Placeholder />} />
-          <Route path="/admin/system" element={<AdminSystem />} />
-
-          {/* Catch-all */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
-
-createRoot(document.getElementById("root")!).render(<App />);
+        {/* Catch-all */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
