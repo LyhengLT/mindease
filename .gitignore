@@ -25,3 +25,7 @@ dist-ssr
 
 .config/
 !.env
+
+# Claude Code / Cowork local state
+.claude/
+.builder/

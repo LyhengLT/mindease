@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install *)",
+      "Bash(pnpm approve-builds *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(pnpm rebuild *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm dev *)",
+      "Bash(curl -s http://localhost:8080)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(pnpm typecheck *)",
+      "Bash(curl *)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(python3 -c \"import sys,json,base64; d=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(d['content']\\).decode\\(\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; [print\\(w['id'], w['name']\\) for w in json.load\\(sys.stdin\\)['workflows']]\")"
+    ]
+  }
+}

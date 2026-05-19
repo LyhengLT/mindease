@@ -19,8 +19,9 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import AdminCrisis from "./pages/AdminCrisis";
+import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminReports from "./pages/AdminReports";
 import AdminSystem from "./pages/AdminSystem";
-import Placeholder from "./pages/Placeholder";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -45,8 +46,8 @@ export default function App() {
           <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
           <Route path="/admin/crisis" element={<AdminRoute><AdminCrisis /></AdminRoute>} />
-          <Route path="/admin/analytics" element={<AdminRoute><Placeholder /></AdminRoute>} />
-          <Route path="/admin/reports" element={<AdminRoute><Placeholder /></AdminRoute>} />
+          <Route path="/admin/analytics" element={<AdminRoute><AdminAnalytics /></AdminRoute>} />
+          <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
           <Route path="/admin/system" element={<AdminRoute><AdminSystem /></AdminRoute>} />
 
           {/* Catch-all */}
