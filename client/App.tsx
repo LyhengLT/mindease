@@ -24,10 +24,13 @@ import AdminReports from "./pages/AdminReports";
 import AdminSystem from "./pages/AdminSystem";
 import NotFound from "./pages/NotFound";
 
+// Strip trailing slash so "/mindease/" becomes "/mindease" for React Router
+const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
